@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.SearchStudent">
+	<select id="searchStudent" resultType="hashmap">
+		select * from
+		student,stu_class where
+		student.class_id=stu_class.class_id
+		<if test="stu_id != null">
+			AND stu_id = #{stu_id}
+		</if>
+		<if test="stu_name != null and stu_name != ''">
+			AND stu_name LIKE '%'+#{stu_name}+'%'
+		</if>
+		<if test="stu_no != null">
+			AND CONVERT(VARCHAR, stu_no) LIKE '%' + CONVERT(VARCHAR, #{stu_no}) +
+			'%'
+		</if>
+		<if test="class_id != null">
+			AND student.class_id = #{class_id}
+		</if>
+	</select>
+	<insert id="insertStudent" parameterType="Entity.student">
+		insert into
+		student(stu_no,stu_name,class_id)values(#{stu_no},#{stu_name},#{class_id})
+	</insert>
+	<select id="classid" resultType="int">
+		select class_id from stu_class
+		where class_name=#{class_name}
+	</select>
+	<update id="updateStudent" parameterType="Entity.student">
+		update student set
+		stu_no=#{stu_no},class_id=#{class_id},stu_name=#{stu_name} where
+		stu_id=#{stu_id}
+	</update>
+	<delete id="deleteStudent" parameterType="Entity.student">
+		delete from student
+		where stu_id=#{stu_id}
+	</delete>
+</mapper>
